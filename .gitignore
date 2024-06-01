@@ -15,6 +15,10 @@
 /myenv
 myenv/
 
+# /djangoreactplan.db.sqlite3
+
+/db.sqlite3
+
 # misc
 .DS_Store
 .env.local
