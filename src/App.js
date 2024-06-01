@@ -12,7 +12,7 @@ class App extends Component{
   handleChange = (e) =>{
     this.setState({text: e.target.value})
   }
-
+  // Hellow
   handleAdd = (e) => {
     if (this.state.text !== ""){
       const items = [...this.state.items, this.state.text];
