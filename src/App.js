@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import './App.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import Plan from './plan'
+import axios from 'axios';
+
 
 class App extends Component{
   state = {
@@ -9,15 +11,36 @@ class App extends Component{
     text : ""
   }
 
+  showPlan = () => {
+    axios.get('http://127.0.0.1:8000/api/list/')
+      .then((res) => {
+        // console.log(res.data)
+        this.setState({items : res.data})
+      })
+  }
+
+  addPlan = (d) => {
+    if(this.state.text !== ""){
+      axios.post("http://127.0.0.1:8000/api/create/", d)
+      .then((res) => {
+        this.setState({ text : '' })
+        this.showPlan()
+      })
+    }
+  }
+
   handleChange = (e) =>{
     this.setState({text: e.target.value})
   }
   // Hellow
   handleAdd = (e) => {
-    if (this.state.text !== ""){
-      const items = [...this.state.items, this.state.text];
-      this.setState({items: items, text:""});
-    }
+    let dt = { items: this.state.text }
+    this.addPlan(dt)
+
+    // if (this.state.text !== ""){
+    //   const items = [...this.state.items, this.state.text];
+    //   this.setState({items: items, text:""});
+    // }
   }
 
   handleDelete = (id) =>{
@@ -31,8 +54,11 @@ class App extends Component{
   }
 
 
-
+  componentDidMount(){
+    this.showPlan()
+  }
   render(){
+
     return (
       <div className='container-fluid my-5'>
 
@@ -54,7 +80,7 @@ class App extends Component{
                 <ul className='list-unstyled row my-5'>
                   {
                     this.state.items.map((value, i) => {
-                      return < Plan key={i} id={i} value={value} sendData={this.handleDelete} />
+                      return < Plan key={i} id={value.i} value={value.items} sendData={this.handleDelete} />
                     })
                   }
                 </ul>
